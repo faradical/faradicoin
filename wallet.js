@@ -84,3 +84,6 @@ const Alice_wallet_address = Alice_key.getPublic('hex');
 var tx = new Transaction(my_wallet_address, Alice_wallet_address, 10);
 tx.sign_tx(my_keys);
 web_out.transaction(tx);
+web_out.get_blockchain().then(res => {
+    console.log(res)
+})

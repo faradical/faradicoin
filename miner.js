@@ -164,7 +164,8 @@ app.post("/block", (req, res) => {
 // Recieve request for current copy of blockchain
 app.get("/blockchain", (req, res) => {
     try {
-        res.status(200).send("");
+        var data = JSON.stringify(blockchain.chain)
+        res.status(200).send(data);
     } catch (err) {
         res.status(500).json({message: err.message});
     }

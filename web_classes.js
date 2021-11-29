@@ -44,7 +44,7 @@ class WebOut{
 
     async get_blockchain(node=this.node_list[0]) {
         let url = node + "/blockchain";
-        await GET(url);
+        return await GET(url);
     }
 
     broadcast_block(block) {
