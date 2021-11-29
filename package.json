@@ -1,0 +1,29 @@
+{
+  "name": "faradicoin",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">Faradicoin</h1>\r Faradicoin is a project developed to explore and demonstrate the underlying technology of crypotocurrencies.",
+  "main": "main.js",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "elliptic": "^6.5.4",
+    "express": "^4.17.1",
+    "gun": "^0.2020.1235",
+    "minimalistic-assert": "^1.0.1",
+    "minimist": "^1.2.5",
+    "mongoose": "^6.0.13",
+    "node-fetch": "^3.1.0",
+    "prompt-sync": "^4.2.0",
+    "ws": "^8.3.0",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
