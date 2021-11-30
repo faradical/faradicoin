@@ -131,10 +131,9 @@ app.get("/", (req, res) => {
 // Heartbeat route
 app.get("/heartbeat", (req, res) => {
     try {
-        data = JSON.stringify({ type: 'miner' })
+        data = { type: 'miner' };
         res.status(200).send(data);
         console.log("Heartbeat requested.")
-        console.log();
     } catch (err) {
         res.status(500).json({message: err.message});
     }
@@ -164,7 +163,7 @@ app.post("/block", (req, res) => {
 // Recieve request for current copy of blockchain
 app.get("/blockchain", (req, res) => {
     try {
-        var data = JSON.stringify(blockchain.chain)
+        var data = blockchain.chain;
         res.status(200).send(data);
     } catch (err) {
         res.status(500).json({message: err.message});
@@ -189,80 +188,3 @@ app.listen(port, () => {
     // mining
     mine()
 });
-
-
-
-
-
-
-
-
-
-
-
-
-// // ~~~~~~~~~~~~~~~~~~~~ TESTING BULLSHIT ~~~~~~~~~~~~~~~~~~~~ //
-
-// //demo people's keys
-// const my_keypair = ec.genKeyPair();
-// console.log("My Private Key: 0a74e53795eeafad0ea38842e24f04a3fa4c4963cfaf662ad7733c763cce8912");
-// const my_key = ec.keyFromPrivate("0a74e53795eeafad0ea38842e24f04a3fa4c4963cfaf662ad7733c763cce8912");
-// const my_wallet_address = my_key.getPublic('hex');
-// console.log("My Wallet Address: " + my_wallet_address);
-
-// const Alice_keypair = ec.genKeyPair();
-// const Alice_key = ec.keyFromPrivate(Alice_keypair.getPrivate('hex'));
-// const Alice_wallet_address = Alice_key.getPublic('hex');
-
-// const Vandale_keypair = ec.genKeyPair();
-// const Vandale_key = ec.keyFromPrivate(Vandale_keypair.getPrivate('hex'));
-// const Vandale_wallet_address = Vandale_key.getPublic('hex');
-
-// const Bob_keypair = ec.genKeyPair();
-// const Bob_key = ec.keyFromPrivate(Bob_keypair.getPrivate('hex'));
-// const Bob_wallet_address = Bob_key.getPublic('hex');
-
-// // Testing
-// // console.log();
-// // console.log("Creating New Testing Chain");
-// console.log();
-
-// function sleep(ms) {
-//     return new Promise((resolve) => {
-//         setTimeout(resolve, ms);
-//     });
-// }
-// async function stall(){
-//     while(true){
-//         console.log(cum)
-//         await sleep(5000);
-//     }
-// }
-// stall()
-
-// blockchain.new_tx(my_wallet_address, Alice_wallet_address, 20, my_key);
-// // blockchain.mine_block(my_wallet_address);
-
-// stall()
-
-// blockchain.new_tx(Alice_wallet_address, Bob_wallet_address, 10, Alice_key);
-// blockchain.new_tx(my_wallet_address, Alice_wallet_address, 20, my_key);
-// blockchain.new_tx(Alice_wallet_address, Bob_wallet_address, 100, Alice_key);
-// // blockchain.mine_block(my_wallet_address);
-
-// stall()
-
-// blockchain.new_tx(my_wallet_address, Vandale_wallet_address, 20, my_key);
-// blockchain.new_tx(Alice_wallet_address, Bob_wallet_address, 10, Alice_key);
-// // blockchain.mine_block(my_wallet_address);
-
-
-
-// console.log("My balance: " + blockchain.get_balance(my_wallet_address));
-// console.log("Van's balance: " + blockchain.get_balance(Vandale_wallet_address));
-// console.log("Alice's balance: " + blockchain.get_balance(Alice_wallet_address));
-// console.log("Bob's balance: " + blockchain.get_balance(Bob_wallet_address));
-// console.log(blockchain.validate_chain());
-
-// console.log(JSON.stringify(blockchain.chain, null, 4));
-// //0424ac99cd638202aaf78c1a9faea024216e2f366a0fceee276a5de81923d6c2666813b852d0d8ed65380aec7459145c839e42a69258ca975a247b317316db2aee
