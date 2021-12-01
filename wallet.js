@@ -55,7 +55,9 @@ if ('nodesFile' in args) {
     var web_out = new WebOut(node_list);
 
 } else {
-    throw("Please provide a node or list of nodes to connect to.");
+    // throw("Please provide a node or list of nodes to connect to.");
+    var node = prompt("Please provide a node to connect to: ");
+    var web_out = new WebOut(node);
 }
 
 console.log();
@@ -71,19 +73,49 @@ console.log();
 //console.log(web_out.node_list[0])
 //console.log(web_out.get_heartbeat())
 
-web_out.get_heartbeats(verbose=true);
+web_out.get_heartbeats(verbose=true).then(n => {
+    // OPTIONS
+    console.log("Please select an option:");
+    console.log("s - Send Faradicoin");
+    console.log("b - Check balance");
+    var response = prompt("Select option: ");
+    // Check balance
+    // Send money
+    while (response != "q") {
+        if (response === "s") {
+            //
+            // var tx = new Transaction(my_wallet_address, remote_address, amount);
+            // tx.sign_tx(my_keys);
+            // web_out.transaction(tx);
+        }
+        else if (response === "b") {
+            //
+            // web_out.get_blockchain().then(res => {
+            //     console.log(res)
+            // });
+        }
+        else {
+            //
+        }
+        console.log("Please select an option:")
+        console.log("s - Send Faradicoin")
+        console.log("b - Check balance")
+        var response = prompt("Select option: ")
+    }
+});
 
-// ~~~~~~~~~~~~~~~~~~~~ MAIN PROGRAM LOOP ~~~~~~~~~~~~~~~~~~~~ //
 
-// OPTIONS
-// Check balance
-// Send money
-const Alice_keypair = ec.genKeyPair();
-const Alice_key = ec.keyFromPrivate(Alice_keypair.getPrivate('hex'));
-const Alice_wallet_address = Alice_key.getPublic('hex');
-var tx = new Transaction(my_wallet_address, Alice_wallet_address, 10);
-tx.sign_tx(my_keys);
-web_out.transaction(tx);
-web_out.get_blockchain().then(res => {
-    console.log(res)
-})
+
+
+
+
+// ~~~~~~~~~~~~~~~~~~~~ TESTING ~~~~~~~~~~~~~~~~~~~~ //
+// const Alice_keypair = ec.genKeyPair();
+// const Alice_key = ec.keyFromPrivate(Alice_keypair.getPrivate('hex'));
+// const Alice_wallet_address = Alice_key.getPublic('hex');
+// var tx = new Transaction(my_wallet_address, Alice_wallet_address, 10);
+// tx.sign_tx(my_keys);
+// web_out.transaction(tx);
+// web_out.get_blockchain().then(res => {
+//     console.log(res)
+// })

@@ -104,6 +104,7 @@ class WebOut{
         if (verbose == true) {
             console.log(`Connected to ${n} mining nodes.`)
         }
+        return n;
     }
 }
 
