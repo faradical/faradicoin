@@ -9,11 +9,13 @@ class Transaction{
         this.amount = amount;
         this.time = time;
         this.signature = signature
+        this.hash = 0;
     }
     get_hash() {
         return SHA256(this.sender + this.receiver + this.amount + this.time).toString();
     }
-    sign_tx(key_obj) {
+    sign_tx(key) {
+        var key_obj = ec.keyFromPrivate(key);
         if (key_obj.getPublic('hex') !== this.sender) {
             console.log("Key/Wallet incorrect.")
         }
@@ -125,9 +127,9 @@ class Blockchain{
         valid_sign_txs.forEach((tx, index) => {
             if (tx.validator() === true) {
                 // Checks a list of transactions and returns the sum for a given address
-                function get_sum(tx, valid_sign_txs) {
+                function get_sum(tx, txs) {
                     var sum = 0;
-                    var other_txs = valid_sign_txs.slice(0,index).concat(valid_sign_txs.slice(index+1,valid_sign_txs.length));
+                    var other_txs = txs.slice(0, index).concat(txs.slice(index+1, txs.length));
                     var sender_txs = [];
                     other_txs.forEach(tx2 => {
                         if (tx2.sender === tx.sender) {
@@ -135,27 +137,27 @@ class Blockchain{
                         }
                     });
                     var receiver_txs = [];
-                    other_txs.forEach(tx2 => {
-                        if (tx2.receiver === tx.sender) {
-                            receiver_txs.push(tx2.amount);
+                    other_txs.forEach(tx3 => {
+                        if (tx3.receiver === tx.sender) {
+                            receiver_txs.push(tx3.amount);
                         }
                     });
                     sender_txs.map(n => sum-=n);
                     receiver_txs.map(n => sum+=n);
                     return sum;
                 }
-                function get_prev_sum(tx, valid_sign_txs) {
+                function get_prev_sum(tx, txs) {
                     var sum = 0;
                     var sender_txs = [];
-                    valid_sign_txs.forEach(tx2 => {
+                    txs.forEach(tx2 => {
                         if (tx2.sender === tx.sender) {
                             sender_txs.push(tx2.amount);
                         }
                     });
                     var receiver_txs = [];
-                    valid_sign_txs.forEach(tx2 => {
-                        if (tx2.receiver === tx.sender) {
-                            receiver_txs.push(tx2.amount);
+                    txs.forEach(tx3 => {
+                        if (tx3.receiver === tx.sender) {
+                            receiver_txs.push(tx3.amount);
                         }
                     });
                     sender_txs.map(n => sum-=n);
@@ -180,7 +182,7 @@ class Blockchain{
                 if (tx.amount < get_sum(tx, valid_sign_txs)) {
                     valid_txs.push(tx);
                 }
-                // If enough transactions to put the sender in the black are not found in the current block, begin checking previous blocks.
+                // If enough transactions to put the sender in the black are not found in the currently being mined block, begin checking previous blocks.
                 else if (check_previous_sums(this, tx, this.chain.length-1)) {
                     valid_txs.push(tx);
                 }
@@ -193,8 +195,17 @@ class Blockchain{
     mine_block(mining_address) {
         // Transactions Validation
         if (this.pending_tx.length !== 0) {
-            console.log("Begin Mining New Block");
+
+            // console.log("Begin Mining New Block");
+            // console.log()
+            // console.log(this.pending_tx);
+
             var valid_txs = this.validate_transaction_amounts(this.pending_tx);
+
+            // console.log()
+            // console.log("Transactions verified.")
+            // console.log()
+            // console.log(valid_txs)
 
             // Add reward transaction
             // This is also where minimum number or maximum number of txs per block can be defined.
@@ -202,6 +213,9 @@ class Blockchain{
             if (valid_txs.length !== 0) {
                 // Add mining reward
                 valid_txs.push(new Transaction("Mining Reward", mining_address, this.mining_reward));
+
+                console.log()
+                console.log("Mining Reward created.")
 
                 // Clear txs from pending queue
                 valid_txs.forEach(tx => {
@@ -212,7 +226,14 @@ class Blockchain{
                     })
                 });
 
+                console.log()
+                console.log("Pending Queue cleared.")
+
                 // Block Creation
+
+                console.log()
+                console.log("Beginning Block creation.")
+
                 const data = {transactions: valid_txs};
                 const block = new Block(data, Date.now(), this.difficulty);
                 block.previous_hash = this.chain[this.chain.length - 1].hash;
@@ -221,6 +242,11 @@ class Blockchain{
                 console.log("New Block Mined: " + block.hash);
                 console.log();
                 return block;
+            }
+            else{
+                // console.log("Insufficient Verified Transactions.")
+                // clear sufficiently old transactions from queue
+                return "No TX"
             }
         }
     }

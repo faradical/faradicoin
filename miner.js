@@ -61,7 +61,6 @@ if ('nodesFile' in args) {
     var genesis = true;
     var node_list = [];
     var web_out = new WebOut(node_list);
-    console.log(web_out);
 }
 
 // Get custom server port from command line
@@ -96,17 +95,22 @@ function sleep(ms) {
 async function mine(){
     while (true) {
         if (blockchain.pending_tx.length > 0) {
-            console.log("mining...")
+            // console.log("mining...")
             // Mine a block
             let block = blockchain.mine_block(key);
-            console.log(block);
-            console.log(block.data.transactions);
-            // Check for any new blocks added
-            if (block.previous_hash !== blockchain.chain.previous_hash) {
-                // Broadcast block to other nodes
-                web_out.broadcast_block(block);
-                // Add block to blockchain
-                blockchain.chain.push(block);
+            if (block !== "No TX"){
+                console.log(block);
+                console.log(block.data.transactions);
+                // Check for any new blocks added
+                if (block.previous_hash == blockchain.chain[blockchain.chain.length-1].hash) {
+                    // Broadcast block to other nodes
+                    web_out.broadcast_block(block);
+                    // Add block to blockchain
+                    blockchain.chain.push(block);
+                    console.log()
+                    console.log("New block broadcasted and added.")
+                    console.log()
+                }
             }
         }
         await sleep(5);
@@ -139,13 +143,22 @@ app.get("/heartbeat", (req, res) => {
     }
 });
 
+app.get("/pending_queue", (req, res) => {
+    try {
+        data = blockchain.pending_tx;
+        res.status(200).send(data);
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+});
+
 // Receive new transaction route
 app.post("/transaction", (req, res) => {
     try {
         console.log("New Transaction Received.");
         var tx = new Transaction(req.body.sender, req.body.receiver, req.body.amount, req.body.time, req.body.signature);
-        blockchain.pending_tx.push(tx)
-        res.status(200).send("Transaction Recieved");
+        blockchain.add_tx(tx)
+        res.status(200).send("Transaction Received");
     } catch (err) {
         res.status(500).json({message: err.message});
     }
@@ -186,5 +199,9 @@ app.listen(port, () => {
     console.log(`http://localhost:${port}/`);
     
     // mining
-    mine()
+    mine().then(() =>{
+        console.log();
+    }).catch(err => {
+        console.log(err);
+    });
 });

@@ -39,12 +39,14 @@ class WebOut{
             let url = node + "/transaction";
             var res = await POST(url, transaction)
             console.log(`${node} says: ${res}`)
-        };
+        }
+        return res;
     }
 
     async get_blockchain(node=this.node_list[0]) {
         let url = node + "/blockchain";
-        return await GET(url);
+        var res = await GET(url);
+        return res;
     }
 
     broadcast_block(block) {
