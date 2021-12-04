@@ -156,7 +156,7 @@ app.get("/pending_queue", (req, res) => {
 app.post("/transaction", (req, res) => {
     try {
         console.log("New Transaction Received.");
-        var tx = new Transaction(req.body.sender, req.body.receiver, req.body.amount, req.body.time, req.body.signature);
+        var tx = new Transaction(req.body.sender, req.body.receiver, req.body.amount, req.body.time, req.body.signature, req.body.hash);
         blockchain.add_tx(tx)
         res.status(200).send("Transaction Received");
     } catch (err) {

@@ -13,17 +13,24 @@ Faradicoin is a project developed to explore and demonstrate the underlying tech
 Still need to add previous transaction hash to the hash of the current transaction to ensure duplicate transactions sent at the same time do not also feature the same hash.
 ![Faradicoin_Transaction_Signing](Documentation/Faradicoin_Transaction_Signing.png)
 
+* Hashing + Signing mining rewards (Use previous blocks reward hash?)
+* Previous hash for normal transactions will be the hash of the last transaction sent OR received by the current transactions sender.
+
 ## Proof-of-Work
 
 
 ## Block Verification
-
+A key element in all distributed blockchains is decentralized censensus. Network rules
 
 ## Incentive vs. Trust
-
+Why follow the rules?
 
 ## Further Developments
-
+* Mining fees
+* Alternative proof systems
+* Smart Contracts
+* Storing data directly on the blockchain.
+* Merkle Trees
 
 ## Conclusion
 

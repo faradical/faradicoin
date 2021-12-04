@@ -3,13 +3,13 @@ const EC = require("elliptic").ec;
 const ec = new EC("secp256k1");
 
 class Transaction{
-    constructor(sender, receiver, amount, time=Date.now(), signature=null) {
+    constructor(sender, receiver, amount, time=Date.now(), signature=null, hash=0) {
         this.sender = sender;
         this.receiver = receiver;
         this.amount = amount;
         this.time = time;
         this.signature = signature
-        this.hash = 0;
+        this.hash = hash;
     }
     get_hash() {
         return SHA256(this.sender + this.receiver + this.amount + this.time).toString();
@@ -131,15 +131,13 @@ class Blockchain{
                     var sum = 0;
                     var other_txs = txs.slice(0, index).concat(txs.slice(index+1, txs.length));
                     var sender_txs = [];
+                    var receiver_txs = [];
                     other_txs.forEach(tx2 => {
-                        if (tx2.sender === tx.sender) {
+                        if (tx2.sender == tx.sender) {
                             sender_txs.push(tx2.amount);
                         }
-                    });
-                    var receiver_txs = [];
-                    other_txs.forEach(tx3 => {
-                        if (tx3.receiver === tx.sender) {
-                            receiver_txs.push(tx3.amount);
+                        else if (tx2.receiver == tx.sender) {
+                            receiver_txs.push(tx2.amount);
                         }
                     });
                     sender_txs.map(n => sum-=n);
@@ -149,27 +147,43 @@ class Blockchain{
                 function get_prev_sum(tx, txs) {
                     var sum = 0;
                     var sender_txs = [];
+                    var receiver_txs = [];
+
+                    console.log(tx.sender)
+                    
                     txs.forEach(tx2 => {
-                        if (tx2.sender === tx.sender) {
+                        console.log(tx2.receiver)
+                        if (tx2.sender == tx.sender) {
                             sender_txs.push(tx2.amount);
                         }
-                    });
-                    var receiver_txs = [];
-                    txs.forEach(tx3 => {
-                        if (tx3.receiver === tx.sender) {
-                            receiver_txs.push(tx3.amount);
+                        else if (tx2.receiver == tx.sender) {
+                            console.log("If is being hit")
+                            receiver_txs.push(tx2.amount);
+                        }
+                        else {
+                            console.log("Conditional statements is js are bullshit.")
                         }
                     });
                     sender_txs.map(n => sum-=n);
                     receiver_txs.map(n => sum+=n);
+
+                    console.log("sender_txs:")
+                    console.log(sender_txs)
+                    console.log("receiver_txs:")
+                    console.log(receiver_txs)
+                    console.log(`sum: ${sum}`)
+                    
                     return sum;
                 }
                 // sequentially checks 
                 function check_previous_sums(blockchain, tx, block_n) {
+                    console.log()
+                    console.log(block_n)
                     if (block_n < 0) {
                         return false;
                     }
                     var prev_trans = blockchain.chain[block_n].data.transactions;
+                    console.log(prev_trans)
                     if (tx.amount < get_prev_sum(tx, prev_trans)) {
                         return true;
                     }
@@ -178,8 +192,9 @@ class Blockchain{
                     }
                 }
 
+                var sum = get_sum(tx, valid_sign_txs);
                 // If the sum exceeds the transaction amount, add the transaction to the list of valid ones.
-                if (tx.amount < get_sum(tx, valid_sign_txs)) {
+                if (tx.amount < sum) {
                     valid_txs.push(tx);
                 }
                 // If enough transactions to put the sender in the black are not found in the currently being mined block, begin checking previous blocks.
