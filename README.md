@@ -10,12 +10,23 @@ Faradicoin is a project developed to explore and demonstrate the underlying tech
 ## Objective
 --->
 
+All hashes are in hexidecimal format.
+
 ## Transaction Verification
-Transactions in Faradicoin are constructed at the wallet level and submitted to miners in JSON format. Each transaction features five default properties: a sender address, reciever address, transaction amount, time stamp, and the hash of the last transaction created by the sender wallet. 
+Transactions in Faradicoin are constructed at the wallet level and submitted to miners in JSON format. Each transaction features five default properties: 
+* **Sender address:** Or the Wallet address, the public key of the sender.
+* **Reciever address:** The public key of the reciever.
+* **Transaction amount:** The amount of Faradicoin to be sent.
+* **Time stamp:** Time when the transaction is created by the wallet.
+* **Previous Hash:** The hash of the last transaction created by the sender wallet, with the initial-use hash being 0.
+
+A new SHA256 hash for the transaction is then created using the Sender, Reciever, Amount, and Previous Hash properties. At this point, the **key pair object* is used to sign the hash. This ensures no two messages will have the same hash/signature pair, eliminating the possibility of transaction forgery. 
 
 ![Faradicoin_Transaction_Signing](Documentation/Faradicoin_Transaction_Signing.png)
 
+Transactions are then POSTed to the `/transaction` route of all miners in the wallet's network, allowing them to compete with each other to process the transaction quicker than the other nodes and thus increase their likelihood of claiming the reward. As transactions are received by the miners, they immediately begin validating signatures. First the signature property is checked to ensure it is not empty, then the Sender address is used to generate a public key object with elliptic.js and the hash (a freshly generated hash of the transaction, not the hash property) is checked against the signature using the `.verify()` method. If the transaction is valid, it is then added to the pending transaction queue.
 
+When sufficient transactions have been sumbitted to begin mining a block,
 
 ## Proof-of-Work
 
@@ -27,13 +38,21 @@ A key element in all distributed blockchains is decentralized censensus. Network
 
 ## Incentive vs. Trust
 Why follow the rules?
+<!---
+Ways to hack the current system include:
+* Creating and submitting thousands of small transactions to a single mining node in order to receive a reward. Solution would involve overhaul of the network to to become fully decentralized, with all meesages being simultaneously multicast to every node on the network. Gun.js may be be a useful way to achieve this. Nodes would then reject any blocks containing transactions that were not in their pending queues (excepting mining rewards).
+--->
 
 ## Further Developments
-* Mining fees
+* Decentralized Network with Mulitcast addressing
+* Real-time verification of transaction amounts (To improve block mining time)
+* Merkle Trees for disk space preservation via the discarding of spent transactions with breaking block hashes.
+* Minimum/maximum block sizes.
+* Dynamic updates to difficulty and mining reward size.
+* Mining "fees" or tips that can be added to transactions for the miner to claim.
 * Alternative proof systems
 * Smart Contracts
 * Storing data directly on the blockchain.
-* Merkle Trees
 * Adaptive difficulty and block rewards.
 
 ## Conclusion
