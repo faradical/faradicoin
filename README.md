@@ -26,7 +26,30 @@ A new SHA256 hash for the transaction is then created using the Sender, Reciever
 
 Transactions are then POSTed to the `/transaction` route of all miners in the wallet's network, allowing them to compete with each other to process the transaction quicker than the other nodes and thus increase their likelihood of claiming the reward. As transactions are received by the miners, they immediately begin validating signatures. First the signature property is checked to ensure it is not empty, then the Sender address is used to generate a public key object with elliptic.js and the hash (a freshly generated hash of the transaction, not the hash property) is checked against the signature using the `.verify()` method. If the transaction is valid, it is then added to the pending transaction queue.
 
-When sufficient transactions have been sumbitted to begin mining a block,
+When sufficient transactions have been sumbitted to begin mining a block, the miner will begin by verifying all of the transaction amounts are valid. This entails first checking the transactions in the pending queue, then further back on the blockchain to ensure that the sender has the appropriate amount of Faradicoin to actually complete the transaction. As checking the entire blockchain and summing the history of sent and recieved Faradicoins for each transaction would be time consuming, the miner instead works backwards, 
+
+$$
+\begin{equation}
+block_n= Current\text{ }Blockchain\text{ }Height
+\end{equation}
+$$
+
+$$
+\begin{equation}
+f(block_n)=\sum_{i=0}^{block_n\text{ }transactions}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=0}^{block_n\text{ }transactions}{tx_{i\text{ }sender=tx.sender}amounts}
+\end{equation}
+$$
+
+$$
+\begin{equation}
+While\text{ }f(block_n)=
+\begin{cases}
+\ge Tx_iamount,&Valid\text{ }Transaction\\
+< Tx_iamount,&f(block_n)=f(block_n)+f(block_n-1)
+\end{cases}
+\end{equation}
+$$
+
 
 ## Proof-of-Work
 
