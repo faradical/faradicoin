@@ -30,9 +30,7 @@ When sufficient transactions have been sumbitted to begin mining a block, the mi
 
 ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification.png)
 
-<img align="center" href="https://github.com/faradical/faradicoin/Documentation/transaction_amounts_verification.png">
-
-$$
+<!-- $$
 \begin{equation}
 block_n= Current\text{ }Blockchain\text{ }Height
 \end{equation}
@@ -52,7 +50,7 @@ While\text{ }f(block_n)=
 < Tx_iamount,&f(block_n)=f(block_n)+f(block_n-1)
 \end{cases}
 \end{equation}
-$$
+$$ -->
 
 
 ## Proof-of-Work
