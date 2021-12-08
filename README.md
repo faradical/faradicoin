@@ -28,6 +28,19 @@ Transactions are then POSTed to the `/transaction` route of all miners in the wa
 
 When sufficient transactions have been sumbitted to begin mining a block, the miner will begin by verifying all of the transaction amounts are valid. This entails first checking the transactions in the pending queue, then further back on the blockchain to ensure that the sender has the appropriate amount of Faradicoin to actually complete the transaction. As checking the entire blockchain and summing the history of sent and recieved Faradicoins for each transaction would be time consuming, the miner instead works backwards, 
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script src="jquery.jslatex.js"></script>
+
+<script>
+$(function () {
+    $(".latex").latex();
+});
+</script>
+
+<div class="latex">
+block_n= Current\text{ }Blockchain\text{ }Height
+</div>
+
 $$
 \begin{equation}
 block_n= Current\text{ }Blockchain\text{ }Height
