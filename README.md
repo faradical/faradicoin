@@ -4,13 +4,11 @@
 --->
 
 ## Abstract
-Faradicoin is a project developed to explore and demonstrate the underlying technology of crypotocurrencies. It is constructed on a Proof-of-Work based Blockchain similiar to what is used Bitcoin and other cryptocurrencies. The project is currently written in JavaScript using the MERN stack with the elliptic module handling encryption keys and crypto-js/sha256 to perform cryptographic hashing. It demonstrates all the basics of a modern cryptocurrency including the technical aspects and core principles required in creating a viable currency using a decentralized, trustless network.
+Faradicoin is a project developed to explore and demonstrate the underlying technology of crypotocurrencies. It is constructed on a Proof-of-Work based Blockchain similiar to what is used Bitcoin and other cryptocurrencies. The project is currently written in JavaScript using the MERN stack with the elliptic module handling encryption keys and crypto-js/sha256 to perform cryptographic hashing. It demonstrates all the basics of a modern cryptocurrency including the technical aspects and core principles required in creating a viable currency using a decentralized, trustless network. All hashes are in hexidecimal format.
 
 <!---
 ## Objective
 --->
-
-All hashes are in hexidecimal format.
 
 ## Transaction Verification
 Transactions in Faradicoin are constructed at the wallet level and submitted to miners in JSON format. Each transaction features five default properties: 
@@ -60,7 +58,7 @@ Ways to hack the current system include:
 --->
 
 ## Further Developments
-* Decentralized Network with Mulitcast addressing
+* Decentralized Network with Multicast addressing (possibly using pub/sub model or gun.js)
 * Real-time verification of transaction amounts (To improve block mining time)
 * Improved verification method for validating transaction amounts.
 * Merkle Trees for disk space preservation via the discarding of spent transactions with breaking block hashes.
