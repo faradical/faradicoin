@@ -38,7 +38,7 @@ $$
 
 $$
 \begin{equation}
-f(block_n)=\sum_{i=0}^{block_n\text{ }transactions}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=0}^{block_n\text{ }transactions}{tx_{i\text{ }sender=tx.sender}amounts}
+f(block_n)=\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.sender}amounts}
 \end{equation}
 $$
 
@@ -51,7 +51,17 @@ While\text{ }f(block_n)=
 \end{cases}
 \end{equation}
 $$ -->
-
+$$
+block_n= Current\text{ }Blockchain\text{ }Height
+\\
+f(block_n)=\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.sender}amounts}
+\\
+While\text{ }f(block_n)=
+\begin{cases}
+\ge Tx_iamount,&Valid\text{ }Transaction\\
+< Tx_iamount,&f(block_n)=f(block_n)+f(block_n-1)
+\end{cases}
+$$
 
 ## Proof-of-Work
 
