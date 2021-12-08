@@ -30,38 +30,18 @@ When sufficient transactions have been sumbitted to begin mining a block, the mi
 
 ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification.png)
 
+
 <!-- $$
-\begin{equation}
 block_n= Current\text{ }Blockchain\text{ }Height
-\end{equation}
-$$
-
-$$
-\begin{equation}
+\\
 f(block_n)=\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.sender}amounts}
-\end{equation}
-$$
-
-$$
-\begin{equation}
+\\
 While\text{ }f(block_n)=
 \begin{cases}
 \ge Tx_iamount,&Valid\text{ }Transaction\\
 < Tx_iamount,&f(block_n)=f(block_n)+f(block_n-1)
 \end{cases}
-\end{equation}
 $$ -->
-$$
-block_n= Current\text{ }Blockchain\text{ }Height
-\\
-f(block_n)=\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.sender}amounts}
-\\
-While\text{ }f(block_n)=
-\begin{cases}
-\ge Tx_iamount,&Valid\text{ }Transaction\\
-< Tx_iamount,&f(block_n)=f(block_n)+f(block_n-1)
-\end{cases}
-$$
 
 ## Proof-of-Work
 
