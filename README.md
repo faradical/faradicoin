@@ -26,12 +26,12 @@ A new SHA256 hash for the transaction is then created using the Sender, Reciever
 
 Transactions are then POSTed to the `/transaction` route of all miners in the wallet's network, allowing them to compete with each other to process the transaction quicker than the other nodes and thus increase their likelihood of claiming the reward. As transactions are received by the miners, they immediately begin validating signatures. First the signature property is checked to ensure it is not empty, then the Sender address is used to generate a public key object with elliptic.js and the hash (a freshly generated hash of the transaction, not the hash property) is checked against the signature using the `.verify()` method. If the transaction is valid, it is then added to the pending transaction queue.
 
-When sufficient transactions have been sumbitted to begin mining a block, the miner will begin by verifying all of the transaction amounts are valid. This entails first checking the transactions in the pending queue, then further back on the blockchain to ensure that the sender has the appropriate amount of Faradicoin to actually complete the transaction. As checking the entire blockchain and summing the history of sent and recieved Faradicoins for each transaction would be time consuming, the miner instead works backwards, 
+When sufficient transactions have been sumbitted to begin mining a block, the miner will begin by verifying all of the transaction amounts are valid. This entails first checking the transactions in the pending queue, then further back on the blockchain to ensure that the sender has the appropriate amount of Faradicoin to actually complete the transaction. As checking the entire blockchain and summing the history of sent and recieved Faradicoins for each transaction would be time consuming, the miner instead works backwards, summing together all the amounts received by the address and subtracting any amounts it sent. The operation is then performed recursively, checking the transactions from the most recent validated block and continuing to add all these totals together until either the amount of faradicoin available exceeds the amount to be transacted, or the current blockchain is exhausted.
 
-![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification.png)
+<!-- ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification.png) -->
 
 
-<!-- $$
+$$
 block_n= Current\text{ }Blockchain\text{ }Height
 \\
 f(block_n)=\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.receiver}amounts}-\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }sender=tx.sender}amounts}
@@ -41,7 +41,9 @@ While\text{ }f(block_n)=
 \ge Tx_iamount,&Valid\text{ }Transaction\\
 < Tx_iamount,&f(block_n)=f(block_n)+f(block_n-1)
 \end{cases}
-$$ -->
+$$
+
+In this way, the amount of times the full blockchain must be examined is limited to scenarios where a transaction is invalid, and more frequent transactors are rewarded with faster transaction times.
 
 ## Proof-of-Work
 
@@ -61,6 +63,7 @@ Ways to hack the current system include:
 ## Further Developments
 * Decentralized Network with Mulitcast addressing
 * Real-time verification of transaction amounts (To improve block mining time)
+* Improved verification method for validating transaction amounts.
 * Merkle Trees for disk space preservation via the discarding of spent transactions with breaking block hashes.
 * Minimum/maximum block sizes.
 * Dynamic updates to difficulty and mining reward size.
