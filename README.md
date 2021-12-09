@@ -47,10 +47,10 @@ $$ -->
 
 ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification_1.png)
 
-<p style="font-style: italic; margin-left: 50px; margin-right: 50px;">
+<!-- <p style="font-style: italic; margin-left: 50px; margin-right: 50px;">
+Figure 1): The function defining the calculation of available funds for a particular address (tx<sub>0</sub>.sender) in block<sub>n</sub>. Where the reciever address in the given transaction is the same as the sender being validated (i.e., where the sender has previously received funds), all such transactions are summed together. The sum of all transactions in block<sub>n</sub> where the sender is the same as the sender in a given transaction (i.e., where the sender from previously sent some funds), is then subtracted from the first sum.
+</p> -->
 *Figure 1): The function defining the calculation of available funds for a particular address (tx<sub>0</sub>.sender) in block<sub>n</sub>. Where the reciever address in the given transaction is the same as the sender being validated (i.e., where the sender has previously received funds), all such transactions are summed together. The sum of all transactions in block<sub>n</sub> where the sender is the same as the sender in a given transaction (i.e., where the sender from previously sent some funds), is then subtracted from the first sum.*
-</p>
-
 <br>
 
 <!-- $$
@@ -66,9 +66,10 @@ $$ -->
 
 ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification_2.png)
 
-<p style="font-style: italic; margin-left: 50px; margin-right: 50px;">
+<!-- <p style="font-style: italic; margin-left: 50px; margin-right: 50px;">
+Figure 2): If the available funds given by f(block<sub>n</sub>) is equal to or exceeds the amount attempting to be transacted, the transaction is deemed valid and added to the new block. If not, the function is called recursively, each time adding the previously returned amount to the output of f(block<sub>n-1</sub>) until either the available funds exceeds the amount, or n = 0, at which point the transaction is declared invalid.
+</p> -->
 *Figure 2): If the available funds given by f(block<sub>n</sub>) is equal to or exceeds the amount attempting to be transacted, the transaction is deemed valid and added to the new block. If not, the function is called recursively, each time adding the previously returned amount to the output of f(block<sub>n-1</sub>) until either the available funds exceeds the amount, or n = 0, at which point the transaction is declared invalid.*
-</p>
 <br>
 
 In this way, the amount of times the full blockchain must be examined is limited to scenarios where a transaction is invalid, and more frequent transactors are rewarded with faster transaction times.
