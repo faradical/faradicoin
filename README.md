@@ -1,7 +1,7 @@
 <h1 align="center">Faradicoin</h1>
-<!---
-<p align="center" style="font-size:small;">Faradical<br>auto_sear#8264<br>www.github.com/faradical</p>
---->
+
+<!-- <p align="center" style="font-size:small;">Faradical<br>auto_sear#8264<br>www.github.com/faradical</p> -->
+
 
 ## Abstract
 Faradicoin is a project developed to explore and demonstrate the underlying technology of crypotocurrencies. It is constructed on a Proof-of-Work based Blockchain similiar to what is used Bitcoin and other cryptocurrencies. The project is currently written in JavaScript using the MERN stack with the elliptic module handling encryption keys and crypto-js/sha256 to perform cryptographic hashing. It demonstrates all the basics of a modern cryptocurrency including the technical aspects and core principles required in creating a viable currency using a decentralized, trustless network. All hashes are in hexidecimal format.
@@ -11,6 +11,7 @@ Faradicoin is a project developed to explore and demonstrate the underlying tech
 --->
 
 <!-- ## Documentation
+* [Read or download the white paper](https://github.com/faradical/faradicoin/blob/master/README.pdf)
 * [Setting up a wallet]()
 * [Setting up a miner]()
 * [Purchasing Faradicoin]() -->
@@ -33,40 +34,66 @@ Transactions are then POSTed to the `/transaction` route of all miners in the wa
 
 When sufficient transactions have been sumbitted to begin mining a block, the miner will begin by verifying all of the transaction amounts are valid. This entails first checking the transactions in the pending queue, then further back on the blockchain to ensure that the sender has the appropriate amount of Faradicoin to actually complete the transaction. As checking the entire blockchain and summing the history of sent and recieved Faradicoins for each transaction would be time consuming, the miner instead works backwards, summing together all the amounts received by the address and subtracting any amounts it sent. The operation is then performed recursively, checking the transactions from the most recent validated block and continuing to add all these totals together until either the amount of faradicoin available exceeds the amount to be transacted, or the current blockchain is exhausted.
 
-<!-- $$
-block_n= Current\text{ }Blockchain\text{ }Height
-\\
-address= tx_0.sender
-\\
+<br>
+
+<!-- <br>
+<br>
+<br>
+$$
 \text{}
 \\
+recieved(block_n,tx_0)=\sum_{i=1}^{block_n.transactions.lenth}\left(x_i =
+    \begin{cases}
+        0, & if:\text{ }tx_0.sender\ne tx_i.receiver\\
+        0, & if:\text{ }tx_0.sender= tx_i.sender\\
+        tx_i.amount, & if:\text{ }tx_0.sender=tx_i.receiver\\
+    \end{cases}\right)
+\\
+$$
+$$
+\\
+sent(block_n,tx_0)=\sum_{i=1}^{block_n.transactions.lenth}\left(x_i =
+    \begin{cases}
+        0, & if:\text{ }tx_0.sender\ne tx_i.sender\\
+        0, & if:\text{ }tx_0.sender= tx_i.receiver\\
+        tx_i.amount, & if:\text{ }tx_0.sender= tx_i.sender\\
+    \end{cases}\right)
+\\
+$$
+$$
 \begin{equation}
-f(block_n)=\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }address=tx.receiver}amounts}-\sum_{i=1}^{block_n\text{ }transaction\text{ }total}{tx_{i\text{ }address=tx.sender}amounts}\
+f(block_n,tx_0)=recieved(block_n,tx_0)-sent(block_n,tx_0)\
 \end{equation}
 $$ -->
 
 ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification_1.png)
 
-<!-- <p style="font-style: italic; margin-left: 50px; margin-right: 50px;">
-Figure 1): The function defining the calculation of available funds for a particular address (tx<sub>0</sub>.sender) in block<sub>n</sub>. Where the reciever address in the given transaction is the same as the sender being validated (i.e., where the sender has previously received funds), all such transactions are summed together. The sum of all transactions in block<sub>n</sub> where the sender is the same as the sender in a given transaction (i.e., where the sender from previously sent some funds), is then subtracted from the first sum.
+<!-- <p style="font-size: 14px; font-style: italic; margin-left: 100px; margin-right: 100px;">
+Figure 1): The function defining the calculation of available funds for a particular address (tx<sub>0</sub>.sender, with tx<sub>0</sub> being the transaction to validate) in block<sub>n</sub>. Where the reciever address in the given transaction is the same as the sender being validated (i.e., where the sender has previously received funds), all such transactions are summed together. The sum of all transactions in block<sub>n</sub> where the sender is the same as the sender in a given transaction (i.e., where the sender from previously sent some funds), is then subtracted from the first sum.
 </p> -->
-*Figure 1): The function defining the calculation of available funds for a particular address (tx<sub>0</sub>.sender) in block<sub>n</sub>. Where the reciever address in the given transaction is the same as the sender being validated (i.e., where the sender has previously received funds), all such transactions are summed together. The sum of all transactions in block<sub>n</sub> where the sender is the same as the sender in a given transaction (i.e., where the sender from previously sent some funds), is then subtracted from the first sum.*
+*Figure 1): The function defining the calculation of available funds for a particular address (tx<sub>0</sub>.sender, with tx<sub>0</sub> being the transaction to validate) in block<sub>n</sub>. Where the reciever address in the given transaction is the same as the sender being validated (i.e., where the sender has previously received funds), all such transactions are summed together. The sum of all transactions in block<sub>n</sub> where the sender is the same as the sender in a given transaction (i.e., where the sender from previously sent some funds), is then subtracted from the first sum.*
 <br>
+
 
 <!-- $$
 \begin{equation}
-While\text{ }f(block_n)
+validate(tx_0, block_n, sum=0)=
 \begin{cases}
-\ge Tx_0.amount,&Valid\text{ }Transaction\\
-< Tx_0.amount, n>0&f(block_n)\to f(block_n)+f(block_{n-1})\\
-< Tx_0.amount, n=0&Invalid\text{ }Transaction\
+if\text{ }(f(block_n,tx_0)+sum \ge tx_0.amount):\\
+\hspace*{20mm} Valid\text{ }Transaction\\
+if\text{ }(n=0):\\
+\hspace*{20mm} Valid\text{ }Transaction\\
+if\text{ }(f(block_n,tx_0)+sum < tx_0.amount):\\
+\hspace*{20mm} sum = sum+f(block_n,tx_0)\\
+\hspace*{20mm} validate(tx_0, block_{n-1},sum)\\
 \end{cases}
 \end{equation}
 $$ -->
 
+
 ![Faradicoin_Transaction_Signing](Documentation/transaction_amounts_verification_2.png)
 
-<!-- <p style="font-style: italic; margin-left: 50px; margin-right: 50px;">
+<!-- <p style="font-size: 14px; font-style: italic; margin-left: 100px; margin-right: 100px;">
 Figure 2): If the available funds given by f(block<sub>n</sub>) is equal to or exceeds the amount attempting to be transacted, the transaction is deemed valid and added to the new block. If not, the function is called recursively, each time adding the previously returned amount to the output of f(block<sub>n-1</sub>) until either the available funds exceeds the amount, or n = 0, at which point the transaction is declared invalid.
 </p> -->
 *Figure 2): If the available funds given by f(block<sub>n</sub>) is equal to or exceeds the amount attempting to be transacted, the transaction is deemed valid and added to the new block. If not, the function is called recursively, each time adding the previously returned amount to the output of f(block<sub>n-1</sub>) until either the available funds exceeds the amount, or n = 0, at which point the transaction is declared invalid.*

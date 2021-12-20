@@ -157,11 +157,7 @@ class Blockchain{
                             sender_txs.push(tx2.amount);
                         }
                         else if (tx2.receiver == tx.sender) {
-                            console.log("If is being hit")
                             receiver_txs.push(tx2.amount);
-                        }
-                        else {
-                            console.log("Conditional statements is js are bullshit.")
                         }
                     });
                     sender_txs.map(n => sum-=n);
@@ -179,7 +175,7 @@ class Blockchain{
                 function check_previous_sums(blockchain, tx, block_n) {
                     console.log()
                     console.log(block_n)
-                    if (block_n < 0) {
+                    if (block_n < 1) {
                         return false;
                     }
                     var prev_trans = blockchain.chain[block_n].data.transactions;
