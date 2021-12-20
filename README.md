@@ -10,11 +10,11 @@ Faradicoin is a project developed to explore and demonstrate the underlying tech
 ## Objective
 --->
 
-<!-- ## Documentation
+## Documentation
 * [Read or download the white paper](https://github.com/faradical/faradicoin/blob/master/README.pdf)
 * [Setting up a wallet]()
 * [Setting up a miner]()
-* [Purchasing Faradicoin]() -->
+* [Purchasing Faradicoin]()
 
 ## Transaction Verification
 Transactions in Faradicoin are constructed at the wallet level and submitted to miners in JSON format. Each transaction features five default properties: 
