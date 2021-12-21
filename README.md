@@ -99,10 +99,16 @@ Figure 2): If the available funds given by f(block<sub>n</sub>) is equal to or e
 *Figure 2): If the available funds given by f(block<sub>n</sub>) is equal to or exceeds the amount attempting to be transacted, the transaction is deemed valid and added to the new block. If not, the function is called recursively, each time adding the previously returned amount to the output of f(block<sub>n-1</sub>) until either the available funds exceeds the amount, or n = 0, at which point the transaction is declared invalid.*
 <br>
 
-In this way, the amount of times the full blockchain must be examined is limited to scenarios where a transaction is invalid, and more frequent transactors are rewarded with faster transaction times.
+The transactions relying on transfers also in the pending queue will be necessary to double check, ensuring they are not relying on transfers that are then rejected later in the process. In this way, the amount of times the full blockchain must be examined is limited to scenarios where a transaction is invalid, and more frequent transactors are rewarded with faster transaction times. 
 
 ## Proof-of-Work
-It is necessary to implement a system in any distributed ledger by which
+It is necessary to implement a system in any distributed ledger by which nodes can be certain that other nodes are running the same, unmolested copy of blockchain. This means preventing back-dated modification of previous blocks and verifying timestamps, and therefore the order, of incoming blocks. This is accomplished in Faradicoin using the Proof-of-Work system, wherein each block has it's **data**, **timestamp**, **previous hash**, and a nonce hashed together to produce the **block hash**. By requiring this hash to begin with a predefined number of zeroes for every block, it becomes necessary for a miner to repeatedly perform this hashing, incrementing the nonce each time until a satisfcatory hash is produces. The number of zeroes, known as the **difficulty number**, or simply the difficulty within the current code, is presently set to 4.
+
+image of PoW process
+
+Math showing how long it will take on average to find a PoW
+
+How PoW prevents system gaming using lots of computing power to rebuild a block in the chain as well as lots of IPs. More in next section.
 
 ## Block Verification
 <!---

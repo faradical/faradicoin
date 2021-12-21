@@ -60,7 +60,7 @@ class Block{
 
     // get_hash() returns the hash of a block
     get_hash() {
-        return SHA256(this.data + JSON.stringify(this.data) + this.time + this.nonce + this.previous_hash).toString();
+        return SHA256(JSON.stringify(this.data) + this.time + this.nonce + this.previous_hash).toString();
     }
 
     mine() {
